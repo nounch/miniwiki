@@ -13,6 +13,7 @@ module MiniWiki
       set :app_pages_path, '/miniwikipages'
       set :app_code_path, '/miniwikicode'
       set :app_css_path, '/miniwiki.css'
+      set :app_js_path, '/miniwiki.js'
       set :public_folder, markdown_path
     end
 
@@ -43,7 +44,8 @@ module MiniWiki
 <html>
   <head>
     <title>MiniWiki</title>
-    <link rel="stylesheet" href="#{settings.app_css_path}" type="text/css" />
+    <link rel="stylesheet" href="#{settings.app_css_path}" type="text/css"\
+ />
     <meta charset="utf-8"/>
   </head>
   <body class="">
@@ -53,11 +55,14 @@ module MiniWiki
 #{content}
       </div>
       </br>
-      <div class="col-md-3 col-md-offset-1 well">
+      <div id="pages-sidebar" class="col-md-3 col-md-offset-1 well">
+      <input id="pages-search-box" class="form-control" type="text" \
+placeholder="Search (RegEx supported)"/></br>
 #{markdown(pages_list)}
       </div>
     </div>
     </div>
+    <script type="text/javascript" src="#{settings.app_js_path}"></script>
   </body>
 </html>
 PAGE
@@ -145,7 +150,7 @@ INFOTEXT
     end
 
     get settings.app_code_path do
-      file_content = File.new(__FILE__, 'r').read
+      file_content = File.read(__FILE__, 'r')
       message = "This page shows the actual souce code of this particular \
 MiniWiki installation.\n\n"
       code = "\n\n<h2 id=\"one-small-file\">One Small File</h2>" +
@@ -159,6 +164,14 @@ MiniWiki installation.\n\n"
       content_type 'text/css'
       send_file File.dirname(__FILE__) +
         '/assets/stylesheets/bootstrap.min.css'
+    end
+
+    get settings.app_js_path do
+      content_type 'text/javascript'
+      pwd = File.dirname(__FILE__)
+      jquery = File.read(pwd + '/assets/javascripts/jquery-1.11.0.min.js')
+      app = File.read(pwd + '/assets/javascripts/app.js')
+      jquery + "\n" + app
     end
   end
 end
