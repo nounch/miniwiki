@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+
+app_file_path = File.expand_path('../../lib/miniwiki/app.rb', __FILE__)
+`rerun "ruby #{app_file_path} #{ARGV[0]} #{ARGV[1]}"`
