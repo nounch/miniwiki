@@ -150,12 +150,12 @@ INFOTEXT
     end
 
     get settings.app_code_path do
-      file_content = File.read(__FILE__, 'r')
+      file_content = File.new(__FILE__, 'r').readlines
       message = "This page shows the actual souce code of this particular \
 MiniWiki installation.\n\n"
       code = "\n\n<h2 id=\"one-small-file\">One Small File</h2>" +
-        message + file_content.split("\n").inject('') do |result, line|
-        result + '        ' + line + "\n"
+        message + file_content.inject('') do |result, line|
+        result + '        ' + line
       end
       page(markdown(page_header('MiniWiki Code') + code))
     end
